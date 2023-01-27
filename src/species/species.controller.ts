@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ParseIntPipe } from '@nestjs/common';
 import { SpeciesService } from './species.service';
 import { CreateSpeciesDto } from './dto/create-species.dto';
 import { UpdateSpeciesDto } from './dto/update-species.dto';
-import { CreateSpeciesValidation } from './pipes/create-species.validation';
+import { ValidationPipe } from 'src/pipes/validation.pipe';
 
 @Controller('species')
 export class SpeciesController {
@@ -13,10 +13,10 @@ export class SpeciesController {
   // that way, we can reuse the structure of CreateSpeciesDto for the validation
 
   @Post()
-  @UsePipes(CreateSpeciesValidation)
-  // this actually asserts CreateSpeciesDto
-  // so we need to first validate createSpeciesDto with a pipe
-  create(@Body() createSpeciesDto: CreateSpeciesDto) {
+  // @UsePipes(CreateSpeciesValidation)
+  // "create(@Body() createSpeciesDto: CreateSpeciesDto)" actually asserts CreateSpeciesDto
+  // so we need to first validate createSpeciesDto with a pipe (@UsePipes(CreateSpeciesValidation))
+  create(@Body(new ValidationPipe()) createSpeciesDto: CreateSpeciesDto) {
     return this.speciesService.create(createSpeciesDto);
   }
 
@@ -26,7 +26,7 @@ export class SpeciesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.speciesService.findOne(+id);
   }
 
