@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SpeciesModule } from './species/species.module';
+import { Species } from './species/entities/species.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { SpeciesModule } from './species/species.module';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get('DATABASE_URL'),
-        entities: [],
+        entities: [Species],
         synchronize: true,
       }),
     }),

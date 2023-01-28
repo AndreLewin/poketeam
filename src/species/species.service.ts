@@ -1,28 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSpeciesDto } from './dto/create-species.dto';
-import { UpdateSpeciesDto } from './dto/update-species.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Species } from './entities/species.entity';
+import { UpdateSpeciesDto } from './species.dto'
 
 @Injectable()
 export class SpeciesService {
-  create(createSpeciesDto: CreateSpeciesDto) {
-    console.log("createSpeciesDto | species.service.ts l8", createSpeciesDto)
+  constructor(
+    @InjectRepository(Species)
+    private speciesRepository: Repository<Species>,
+  ) { }
 
-    return 'This action adds a new species';
+  create(speciesP: Partial<Species>) {
+    return this.speciesRepository.save(speciesP);
   }
 
-  findAll() {
-    return `This action returns all species`;
+  findAll(): Promise<Species[]> {
+    return this.speciesRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} species`;
+  findOne(id: number): Promise<Species | null> {
+    return this.speciesRepository.findOneBy({ id });
   }
 
-  update(id: number, updateSpeciesDto: UpdateSpeciesDto) {
-    return `This action updates a #${id} species`;
+  update(id: number, speciesUpdate: Partial<Species>) {
+    return this.speciesRepository.update({ id }, speciesUpdate)
   }
 
   remove(id: number) {
-    return `This action removes a #${id} species`;
+    return this.speciesRepository.delete({ id })
   }
 }

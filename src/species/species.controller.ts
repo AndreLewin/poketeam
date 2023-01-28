@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ParseIntPipe } from '@nestjs/common';
 import { SpeciesService } from './species.service';
-import { CreateSpeciesDto } from './dto/create-species.dto';
-import { UpdateSpeciesDto } from './dto/update-species.dto';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
+import { Species } from './entities/species.entity';
+import { UpdateSpeciesDto, CreateSpeciesDto } from './species.dto'
 
 @Controller('species')
 export class SpeciesController {
@@ -16,7 +16,11 @@ export class SpeciesController {
   // @UsePipes(CreateSpeciesValidation)
   // "create(@Body() createSpeciesDto: CreateSpeciesDto)" actually asserts CreateSpeciesDto
   // so we need to first validate createSpeciesDto with a pipe (@UsePipes(CreateSpeciesValidation))
+  //// an alternative is to use class-validator through ValidationPipe()
   create(@Body(new ValidationPipe()) createSpeciesDto: CreateSpeciesDto) {
+    // this way of validating (via ValidationPipe()) is kinda broken because we have to specify "Species" for ValidationPipe to do its job
+    // but species is not a Species, it is a Partial<Species> (is does not have .id or some optional properties)
+    // this forces us to always validate on a dto specific for this method
     return this.speciesService.create(createSpeciesDto);
   }
 
@@ -31,8 +35,8 @@ export class SpeciesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSpeciesDto: UpdateSpeciesDto) {
-    return this.speciesService.update(+id, updateSpeciesDto);
+  update(@Param('id') id: string, @Body(new ValidationPipe()) speciesUpdate: UpdateSpeciesDto) {
+    return this.speciesService.update(+id, speciesUpdate);
   }
 
   @Delete(':id')
