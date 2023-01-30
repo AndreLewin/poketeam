@@ -17,7 +17,7 @@ import { Species } from './species/entities/species.entity';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get('DATABASE_URL'),
-        entities: [Species],
+        autoLoadEntities: true,
         synchronize: true,
       }),
     }),
