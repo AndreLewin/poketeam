@@ -1,6 +1,7 @@
 
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import { Pokemon } from './pokemon.entity';
+import { SpeciesTranslation } from './speciesTranslation.entity';
 
 @Entity()
 export class Species {
@@ -31,4 +32,9 @@ export class Species {
   // })
   // user: User;
   // https://www.kindacode.com/snippet/cascade-delete-in-typeorm/
+
+  // translation
+  @OneToOne(() => SpeciesTranslation)
+  @JoinColumn()
+  translations: SpeciesTranslation
 }

@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SpeciesModule } from './species/species.module';
 import { Species } from './entities/species.entity';
 import { Pokemon } from './entities/pokemon.entity';
+import { SpeciesTranslation } from './entities/speciesTranslation.entity';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { Pokemon } from './entities/pokemon.entity';
         synchronize: true,
       }),
     }),
-    TypeOrmModule.forFeature([Species, Pokemon]),
+    TypeOrmModule.forFeature([Species, Pokemon, SpeciesTranslation]),
     SpeciesModule
   ],
   controllers: [AppController],

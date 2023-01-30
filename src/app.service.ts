@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Pokemon } from './entities/pokemon.entity';
 import { Species } from './entities/species.entity';
+import { SpeciesTranslation } from './entities/speciesTranslation.entity';
 
 @Injectable()
 export class AppService {
@@ -12,21 +13,39 @@ export class AppService {
     private speciesRepository: Repository<Species>,
     @InjectRepository(Pokemon)
     private pokemonsRepository: Repository<Pokemon>,
+    @InjectRepository(SpeciesTranslation)
+    private speciesTranslationRepository: Repository<SpeciesTranslation>,
   ) { }
 
   async runScript(): Promise<any> {
+
+    // // oneToOne
+    // let translations = new SpeciesTranslation()
+    // translations.french = "evoli"
+    // translations.spanish = "eevee"
+    // // we have to fetch the response so we get the id so the species can link to the translations
+    // translations = await this.speciesTranslationRepository.save(translations)
+
+    // const neww = new Species()
+    // neww.name = "eevee"
+    // neww.translations = translations
+    // this.speciesRepository.save(neww)
+    // // console.log("new | app.service.ts l33", neww)
+    
+    // ----
+
     // oneToMany manyToOne on same entity with cascade
     // { cascade: true } is placed on the @OneToMany
     // this will automatically place red.previousForm and blue.previousForm (the @ManyToOne)
 
-    const blueOrRed = new Species()
-    blueOrRed.name = "blueOrRed"
-    const red = new Species()
-    red.name = "red"
-    const blue = new Species()
-    blue.name = "blue"
-    blueOrRed.evolutions = [blue, red]
-    this.speciesRepository.save(blueOrRed)
+    // const blueOrRed = new Species()
+    // blueOrRed.name = "blueOrRed"
+    // const red = new Species()
+    // red.name = "red"
+    // const blue = new Species()
+    // blue.name = "blue"
+    // blueOrRed.evolutions = [blue, red]
+    // this.speciesRepository.save(blueOrRed)
 
 
     // ---------
@@ -66,7 +85,8 @@ export class AppService {
       relations: {
         pokemons: true,
         evolutions: true,
-        previousForm: true
+        previousForm: true,
+        translations: true
       }
     });
   }
