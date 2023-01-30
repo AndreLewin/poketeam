@@ -4,7 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SpeciesModule } from './species/species.module';
-import { Species } from './species/entities/species.entity';
+import { Species } from './entities/species.entity';
+import { Pokemon } from './entities/pokemon.entity';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { Species } from './species/entities/species.entity';
         synchronize: true,
       }),
     }),
+    TypeOrmModule.forFeature([Species, Pokemon]),
     SpeciesModule
   ],
   controllers: [AppController],

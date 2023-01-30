@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ParseIntPipe } from '@nestjs/common';
 import { SpeciesService } from './species.service';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
-import { Species } from './entities/species.entity';
+import { Species } from '../entities/species.entity';
 import { UpdateSpeciesDto, CreateSpeciesDto } from './species.dto'
 
 @Controller('species')
